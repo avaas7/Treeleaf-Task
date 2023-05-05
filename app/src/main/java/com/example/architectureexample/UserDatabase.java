@@ -1,6 +1,5 @@
 package com.example.architectureexample;
 
-
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -10,17 +9,16 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Note.class}, version = 1)
-public abstract class NoteDatabase extends RoomDatabase {
+@Database(entities = {User.class}, version = 2)
+public abstract class UserDatabase extends RoomDatabase {
+    private static UserDatabase instance;
 
-    private static NoteDatabase instance;
+    public abstract UserDao userDao();
 
-    public abstract NoteDao noteDao();
-
-    public static synchronized NoteDatabase getInstance(Context context) {
+    public static synchronized UserDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    NoteDatabase.class, "note_database")
+                            UserDatabase.class, "note_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
                     .build();
@@ -28,7 +26,7 @@ public abstract class NoteDatabase extends RoomDatabase {
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+    private static Callback roomCallback = new Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
@@ -37,18 +35,20 @@ public abstract class NoteDatabase extends RoomDatabase {
     };
 
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private NoteDao noteDao;
+        private UserDao userDao;
 
-        private PopulateDbAsyncTask(NoteDatabase db) {
-            noteDao = db.noteDao();
+        private PopulateDbAsyncTask(UserDatabase db) {
+            userDao = db.userDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            noteDao.insert(new Note("Title 1", "Description 1", 1));
-            noteDao.insert(new Note("Title 2", "Description 2", 2));
-            noteDao.insert(new Note("Title 3", "Description 3", 3));
+            userDao.insert(new User("Avash", "Avash@gmail.com", "Male", "9803397768", "Nepal", "1234", "hello world"));
+            userDao.insert(new User( "Bvash", "Avash@gmail.com", "Male", "9803397768", "Nepal", "1234", "hello world"));
+            userDao.insert(new User( "Cvash", "Avash@gmail.com", "Male", "9803397768", "Nepal", "1234", "hello world"));
             return null;
+
         }
+
     }
 }

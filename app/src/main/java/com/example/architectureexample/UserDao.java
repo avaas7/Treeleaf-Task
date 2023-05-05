@@ -1,6 +1,5 @@
 package com.example.architectureexample;
 
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -9,16 +8,18 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.List;
+
 @Dao
-public interface NoteDao {
+public interface UserDao {
+
     @Insert
-    void insert(Note note);
+    void insert(User user);
     @Update
-    void update(Note note);
+    void update(User user);
     @Delete
-    void delete(Note note);
-    @Query("DELETE FROM note_table")
-    void deleteAllNotes();
-    @Query("SELECT * FROM note_table ORDER BY priority DESC")
-    LiveData<List<Note>> getAllNotes();
+    void delete(User user);
+    @Query("DELETE FROM user_table")
+    void deleteAllUser();
+    @Query("SELECT * FROM user_table")
+    LiveData<List<User>> getAllUser();
 }
